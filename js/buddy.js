@@ -1,25 +1,25 @@
-/* TT Tile Link: your brother, from TT Memory Match. In 1 player (and racing Froggy or Foxy) the other brother
-   (Kit.roster.buddyFor: Teddy when Tommy plays, Tommy for Teddy) comes when called with T or his face button, any
-   time and as often as you like. A visit:
+/* TT Gem Swap: your brother, from TT Tile Link (by way of TT Memory Match). In 1 player (and against Froggy or Foxy)
+   the other brother (Kit.roster.buddyFor: Teddy when Tommy plays, Tommy for Teddy) comes when called with T or his
+   face button, any time and as often as you like. A visit:
      pop in beside you (at his roster buddyScale, in a puff of stars) → hello with his signature move (Teddy's boxing
-     combo or his jump shot, Tommy's Y with ✌️) → toss you a treat (🍦 💧 🧃 🍪 🍉 🍌) → THE HELP: he points, and one
-     matching pair glows with its path drawn between them ("TOMMY SAYS: LINK THESE 🐴!"). The pair is one that
-     keeps the board clearable. It glows until you link something (or he's called again).
-     → he stays a few seconds to cheer your links → his goodbye move → pop out.
-   Calling him again while he's here brings another hello, another treat and another pair.
-   In 2 players both brothers are already there, so T is a high five (TL.highFive): they run together, slap hands
+     combo or his jump shot, Tommy's Y with ✌️) → toss you a treat (🍦 💧 🧃 🍪 🍉 🍌) → THE HELP: he points at a
+     match: two gems glow and wiggle toward each other with ↔️ between them ("TOMMY SAYS: SWAP THESE 🍓!"). It's the
+     best-looking move on the board, and it glows until you make a move (or he's called again).
+     → he stays a few seconds to cheer your lines → his goodbye move → pop out.
+   Calling him again while he's here brings another hello, another treat and another match.
+   In 2 players both brothers are already there, so T is a high five (GS.highFive): they run together, slap hands
    and run back. It doesn't change the game. */
 (function () {
   'use strict';
   const T = THREE;
-  const TL = (window.TL = window.TL || {});
+  const GS = (window.GS = window.GS || {});
   const { pick, emojiTexture, rand } = Kit.gfx;
 
   const V = { pop: 0.35, treatAt: 2.1, peekAt: 2.7, stay: 4.5, maxWait: 25 };
   const TREATS = [['🍦', 'ICE CREAM'], ['💧', 'WATER'], ['🧃', 'JUICE BOX'], ['🍪', 'COOKIE'], ['🍉', 'WATERMELON'], ['🍌', 'BANANA']];
 
   let api = null, entry = null, flyers = null;
-  const actor = TL.makeActor();
+  const actor = GS.makeActor();
   // phase: off | in | here | bye | out
   const b = { phase: 'off', t: 0, given: false, treatAt: V.treatAt, peeked: false, peekedAt: -1, calls: 0, treats: 0, peeks: 0, lastTreat: null, lastPeek: null, popT: 0, point: 0 };
   const treat = { sprite: null, flyT: -1, emoji: '', from: new T.Vector3(), to: new T.Vector3() };
@@ -29,9 +29,9 @@
     treat.sprite = new T.Sprite(new T.SpriteMaterial({ depthWrite: false, depthTest: false, transparent: true }));
     treat.sprite.visible = false;
     treat.sprite.renderOrder = 22;
-    TL.stage.scene.add(treat.sprite);
+    GS.stage.scene.add(treat.sprite);
     flyers = a.flyers;
-    actor.attach(TL.stage.scene, flyers);
+    actor.attach(GS.stage.scene, flyers);
     actor.root.rotation.x = a.tilt;
     actor.visible = false;
   }
@@ -56,14 +56,14 @@
     if (!entry) return 'none';
     b.calls++;
     if (b.phase === 'off' || b.phase === 'out') return summon();
-    // another hello, another treat, another pair
+    // another hello, another treat, another match
     actor.react('hello');
     b.phase = 'here';
     b.t = Math.min(b.t, V.pop + 0.1);
     Object.assign(b, { given: false, treatAt: b.t + 1.5, peeked: false, peekedAt: -1 });
     b.popT = Math.max(b.popT, V.pop);
     api.toast(`${entry.name}'S HERE!`, 'buddy');
-    TL.sfx.pop();
+    GS.sfx.pop();
     return 'again';
   }
 
@@ -79,7 +79,7 @@
     const p = actor.root.position, k = scaleNow();
     for (let i = 0; i < 14; i++) flyers.add(i % 3 ? '⭐' : '✨', p.x, p.y + (1 + rand(0, 1)) * k, p.z, rand(-2.5, 2.5) * k, rand(1, 4) * k, rand(0.3, 0.5) * k, 0.8, rand(-4, 4), 3 * k);
     api.toast(`${entry.name}'S HERE!`, 'buddy');
-    TL.sfx.pop();
+    GS.sfx.pop();
     return 'summoned';
   }
 
@@ -90,7 +90,7 @@
     if (treat.sprite) treat.sprite.visible = false;
   }
 
-  // You found a pair while he's here: he cheers (and stays a little longer).
+  // You made a line while he's here: he cheers (and stays a little longer).
   function cheer() {
     if (b.phase !== 'here') return;
     actor.react('cheer');
@@ -113,7 +113,7 @@
     treat.sprite.visible = true;
     treat.flyT = 0;
     api.toast(`${emoji} ${label} FROM ${entry.name}!`, 'treat');
-    TL.sfx.kit('coin', 6);
+    GS.sfx.kit('coin', 6);
   }
 
   function updateTreat(dt) {
@@ -168,9 +168,9 @@
           b.peekedAt = b.t;
           b.peeks++;
           b.lastPeek = p;
-          b.point = p.dx >= 0 ? -2.2 : 2.2; // turn toward the pair and point
-          api.toast(`${entry.name} SAYS: LINK THESE ${p.emoji}!`, 'save');
-          TL.sfx.peek();
+          b.point = p.dx >= 0 ? -2.2 : 2.2; // turn toward the match and point
+          api.toast(`${entry.name} SAYS: SWAP THESE ${p.emoji}!`, 'save');
+          GS.sfx.peek();
         }
       }
       if (b.peeked && b.t < b.peekedAt + 1.8) {
@@ -189,7 +189,7 @@
       if (b.t > 1.7) {
         b.phase = 'out';
         b.t = 0;
-        TL.sfx.pop();
+        GS.sfx.pop();
       }
     } else if (b.phase === 'out') {
       const u = Math.min(1, b.t / 0.25);
@@ -241,7 +241,7 @@
       if (hf.t > hf.raise + 0.28) {
         hf.clapped = true;
         hf.clapT = hf.t;
-        TL.sfx.clap();
+        GS.sfx.clap();
         const k = api.scale();
         const x = (pa.x + pc.x) / 2, y = pa.y + 2.7 * k, z = (pa.z + pc.z) / 2;
         flyers.add('💥', x, y, z, 0, 0.5 * k, 1.0 * k, 0.5, 0, 0);
@@ -273,7 +273,7 @@
     c.place(hc.x, hc.y, hc.z);
   }
 
-  TL.buddy = {
+  GS.buddy = {
     init, setFor, call, summon, dismiss, cheer, update, relayout, V,
     get entry() { return entry; },
     get actor() { return actor; },
@@ -290,5 +290,5 @@
       };
     },
   };
-  TL.highFive = { start: highFive, update: updateHighFive, cancel: cancelHighFive, get on() { return hf.on; } };
+  GS.highFive = { start: highFive, update: updateHighFive, cancel: cancelHighFive, get on() { return hf.on; } };
 })();

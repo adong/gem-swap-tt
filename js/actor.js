@@ -1,16 +1,16 @@
-/* TT Tile Link: a boy beside the board, from TT Memory Match (by way of TT Checkers). TL.makeActor() wraps a Kit.people person:
+/* TT Gem Swap: a boy beside the board, from TT Memory Match (by way of TT Checkers). GS.makeActor() wraps a Kit.people person:
      - stand somewhere, run to a spot (moveTo), face the camera or a direction (face)
      - reactions: hop, cheer, oops, hello / goodbye / signature (Tommy's Y with ✌️, Teddy's boxing with 💥 and his
        jump shot with a 🏀; everyone else waves), over (keep celebrating), shrug (a silly "oh well" for a loss)
      - act(pose, dur): play a pose for a moment: any Kit pose, or ours: 'think' (hand on chin), 'point' (right arm
        out at what he faces), 'shrug' and 'high5' (both hands up to slap his brother's)
      - hold(emoji): a treat in the left hand
-   TL.makePilot() is the CPU friend instead: 🦊 Foxy on a podium, with the same few calls.
+   GS.makePilot() is the CPU friend instead: 🦊 Foxy on a podium, with the same few calls.
    Standing poses settle the legs (the Kit's peace and wave poses stride like a runner). */
 (function () {
   'use strict';
   const T = THREE;
-  const TL = (window.TL = window.TL || {});
+  const GS = (window.GS = window.GS || {});
   const { rand, emojiTexture, radialTexture } = Kit.gfx;
 
   const DUR = { cheer: 0.7, signature: 1.8, oops: 0.9, hello: 1.8, shrug: 1.6 };
@@ -279,7 +279,7 @@
         if (beat !== st.beat) {
           st.beat = beat;
           if (beat === 0 || beat === 2) {
-            TL.sfx.kit('punch');
+            GS.sfx.kit('punch');
             Kit.people.handWorld(p, beat === 0 ? -1 : 1, tmp);
             fwd(tmp2, 0.35 * s);
             flyers.add('💥', tmp.x + tmp2.x, tmp.y, tmp.z + tmp2.z, rand(-0.4, 0.4), rand(0.4, 1), 0.6 * s, 0.45, 0, 0);
@@ -373,7 +373,7 @@
         if (u >= 1) {
           ball.visible = false;
           st.ballT = -1;
-          TL.sfx.kit('swish');
+          GS.sfx.kit('swish');
           for (let i = 0; i < 6; i++) flyers.add('⭐', ballTo.x, ballTo.y, ballTo.z, rand(-1.5, 1.5), rand(0.5, 2.5), 0.35 * s, 0.7, rand(-3, 3), 4);
         }
       }
@@ -508,6 +508,6 @@
     };
   }
 
-  TL.makeActor = makeActor;
-  TL.makePilot = makePilot;
+  GS.makeActor = makeActor;
+  GS.makePilot = makePilot;
 })();

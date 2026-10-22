@@ -1,11 +1,11 @@
-/* TT Tile Link: effects, from TT Memory Match (by way of TT Checkers).
-   TL.fx.flyers(scene): emoji sprites that fly, spin and fade in a 3D scene (stars, 💥, ✌️, treats).
-   TL.fx.bursts(scene): comic "LINK!" starbursts that pop and fade.
-   TL.fx.overlay: confetti and emoji on the 2D canvas over the page, in screen pixels (confetti for a win). */
+/* TT Gem Swap: effects (from TT Tile Link), from TT Memory Match (by way of TT Checkers).
+   GS.fx.flyers(scene): emoji sprites that fly, spin and fade in a 3D scene (stars, 💥, ✌️, treats).
+   GS.fx.bursts(scene): comic "WOW!" starbursts that pop and fade.
+   GS.fx.overlay: confetti and emoji on the 2D canvas over the page, in screen pixels (confetti for a win). */
 (function () {
   'use strict';
   const T = THREE;
-  const TL = (window.TL = window.TL || {});
+  const GS = (window.GS = window.GS || {});
   const { makeCanvas, toTexture, emojiTexture, rand, pick, FONT } = Kit.gfx;
 
   // ---------------------------------------------------------------- 3D emoji flyers
@@ -62,7 +62,7 @@
   // ---------------------------------------------------------------- comic starbursts
 
   const burstCache = {};
-  // The word is translated when drawn (PAIR! is 配对！ in 中文), and cached per language.
+  // The word is translated when drawn (WOW! is 哇！ in 中文), and cached per language.
   function burstTexture(en, fill = '#ffd400', ink = '#e8372c') {
     const word = Kit.lang ? Kit.lang.t(en) : en;
     const key = word + fill + ink;
@@ -215,5 +215,5 @@
     return { init, resize, burst, rain, update, clear, get count() { return parts.length; } };
   })();
 
-  TL.fx = { flyers, bursts, burstTexture, overlay };
+  GS.fx = { flyers, bursts, burstTexture, overlay };
 })();

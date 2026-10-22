@@ -83,23 +83,24 @@
     const W = ST.W;
     if (G.state === 'home' || G.state === 'boot' || !G.sides) {
       // the title: the little board, the player beside it
-      const sideW = Math.max(70, Math.min(220, area.w * 0.27));
+      const sideW = Math.max(70, Math.min(260, area.w * (G.wide ? 0.36 : 0.3)));
       out.board = { x: area.x + sideW, y: area.y, w: area.w - sideW, h: area.h };
-      const h = Math.min(area.h * 0.5, sideW * 1.45);
-      out.L = { x: area.x + sideW * 0.5, feet: area.y + area.h * 0.86, h };
-      out.R = { x: area.x + sideW * 0.85, feet: out.L.feet, h: h * 0.95 };
+      const h = Math.min(area.h * 0.5, sideW * 1.2);
+      const pair = prefs.mode !== 'solo';
+      out.L = { x: area.x + sideW * (pair ? 0.36 : 0.55), feet: area.y + area.h * 0.86, h };
+      out.R = { x: area.x + sideW * 0.86, feet: area.y + area.h * 0.9, h: h * 0.95 };
       out.B = out.R;
       return out;
     }
     const two = G.sides.length === 2;
     if (G.wide) {
-      const sideW = Math.max(84, Math.min(240, area.w * 0.18));
+      const sideW = Math.max(84, Math.min(300, area.w * (two ? 0.18 : 0.25)));
       const rightW = two ? sideW : Math.min(150, callH + 24);
       out.board = { x: area.x + sideW, y: area.y, w: area.w - sideW - rightW, h: area.h };
       const h = Math.min(area.h * 0.42, sideW * 1.3);
       const feet = area.y + area.h * 0.94;
-      out.L = { x: area.x + sideW * 0.5, feet, h };
-      out.B = { x: area.x + sideW * 0.98, feet: feet + h * 0.04, h: h * 0.95 };
+      out.L = { x: area.x + sideW * (two ? 0.5 : 0.32), feet, h };
+      out.B = { x: area.x + sideW * (two ? 0.98 : 0.76), feet: feet + h * 0.04, h: h * 0.95 };
       out.R = { x: area.x + area.w - rightW * 0.5, feet: Math.min(area.y + area.h * 0.62, ST.H - callH - 40), h: h * 0.9 };
     } else {
       // the boys in a strip along the bottom
@@ -126,8 +127,6 @@
       const top = ui.hudtop.getBoundingClientRect().bottom + 8;
       area = G.wide ? { x: 56, y: top, w: W - 56 - 10, h: H - top - 10 } : { x: 8, y: top, w: W - 16, h: H - top - 6 };
     }
-    // the title's little board is square on a wide screen, long and low on a tall one
-    if (G.state === 'home' && G.demo && G.demo.wide !== G.wide) demoStart();
     spots = arrange(area);
     view.fit(spots.board);
     placeActors();
@@ -621,8 +620,8 @@
   // ---------------------------------------------------------------- the title's little board
 
   function demoStart() {
-    const spec = G.wide ? { rows: 6, cols: 6, kinds: 5 } : { rows: 5, cols: 8, kinds: 5 };
-    G.demo = { b: R.deal(spec, (Math.random() * 1e9) | 0), t: 1.2, wide: G.wide };
+    const spec = { rows: 6, cols: 6, kinds: 5 };
+    G.demo = { b: R.deal(spec, (Math.random() * 1e9) | 0), t: 1.2 };
     view.setBoard(G.demo.b);
   }
   function demoUpdate(dt) {

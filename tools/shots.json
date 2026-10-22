@@ -1,12 +1,12 @@
 [
  {
   "label": "prefs",
-  "js": "localStorage.setItem('claudeGames.muted', '1'); localStorage.removeItem('claudeGames.lang'); localStorage.removeItem('tileLinkTT.v1'); location.reload(); 'reload'",
+  "js": "localStorage.setItem('claudeGames.muted', '1'); localStorage.removeItem('claudeGames.lang'); localStorage.removeItem('gemSwapTT.v1'); location.reload(); 'reload'",
   "wait": 4000
  },
  {
   "label": "title",
-  "js": "try { game.hold(true); game.step(1); for (var i = 0; i < 40 && game.G.demo.a < 0; i++) game.step(0.1); game.step(0.62); 'demo link ' + JSON.stringify(game.G.demo.a) } catch (e) { 'error ' + e.message }",
+  "js": "try { game.hold(true); game.step(0.5); for (var i = 0; i < 40 && game.view.busy(); i++) game.step(0.1); game.step(0.2); JSON.stringify(game.info().board) } catch (e) { 'error ' + e.message }",
   "wait": 900,
   "shot": "screenshot"
  }
